@@ -1,0 +1,22 @@
+{
+    "name": "uglide/DbFixtureManager",
+    "type": "library",
+    "description": "DbFixture manager for functional tests",
+    "keywords": ["db", "fixture", "tests"],
+    "homepage": "https://github.com/uglide/DbFixtureManager",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Igor Malinovskiy",
+            "email": "u.glide@gmail.com"
+        }
+    ],
+    "require": {
+        "php"               : ">=5.3.0",
+        "phpunit/phpunit"   : "3.7.*"
+    },
+
+    "autoload": {
+        "psr-0": {"uglide": "src/"}
+    }
+}
