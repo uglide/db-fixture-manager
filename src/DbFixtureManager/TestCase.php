@@ -36,11 +36,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         parent::__construct($name, $data, $dataName);
 
         $this->fixturesManager = new Manager($this->getDb());
-
-        /**
-         * Register custom autoLoader
-         */
-        $this->registerFixturesAutoloader();
     }
 
     /**
@@ -73,6 +68,4 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     }
 
     abstract protected function getDb();
-
-    abstract protected function registerFixturesAutoloader();
 }
