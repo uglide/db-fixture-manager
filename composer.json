@@ -1,9 +1,9 @@
 {
-    "name": "uglide/DbFixtureManager",
+    "name": "uglide/db-fixture-manager",
     "type": "library",
     "description": "DbFixture manager for functional tests",
     "keywords": ["db", "fixture", "tests"],
-    "homepage": "https://github.com/uglide/DbFixtureManager",
+    "homepage": "https://github.com/uglide/db-fixture-manager",
     "license": "MIT",
     "authors": [
         {
