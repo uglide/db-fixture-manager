@@ -235,8 +235,9 @@ class Manager
      */
     private function getFixturesDataFromAnnotation(TestCase $testCase)
     {
-        $fixturesRawData = $testCase->getAnnotations()
-            ['method'][self::FIXTURE_ANNOTATION_KEY];
+        $anotations = $testCase->getAnnotations();
+
+        $fixturesRawData = $anotations['method'][self::FIXTURE_ANNOTATION_KEY];
 
         $fixtures = array();
 
@@ -305,9 +306,11 @@ class Manager
      */
     private function isFixturesUsedInTest(TestCase $testCase)
     {
+        $anotations = $testCase->getAnnotations();
+
         return array_key_exists(
             self::FIXTURE_ANNOTATION_KEY,
-            $testCase->getAnnotations()['method']
+            $anotations['method']
         );
     }
 
