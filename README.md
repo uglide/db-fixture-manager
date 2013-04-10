@@ -1,8 +1,6 @@
 DbFixtureManager 
 ================
 
-## TODO: Update this doc ##
-
 
 DbFixtureManager- создан с целью упростить управление фикстурами БД и подготовку тестового окружения для выполнения тестов.
 
@@ -49,19 +47,21 @@ public static function setUpShop()
 
 ![](http://glide.name/docs/zfc-transition/mfm/2.PNG)
 
-Класс наследуется от Core_Tests_Fixtures_Container_Abstract:
-`
-class Shops_Fixtures_Container extends Core_Tests_Fixtures_Container_Abstract
+Класс наследуется от uglide\DbFixtureManager\ContainerAbstract:
+```
+use uglide\DbFixtureManager\ContainerAbstract;
+class Shops_Fixtures_Container extends ContainerAbstract
 {
     ...
 }
-`
+```
 
 В данном классе необходимо определить методы для подготовки окружения, в данном случае это будет ***setUpShop()***
 
-`
 
-  class Shops_Fixtures_Container extends Core_Tests_Fixtures_Container_Abstract
+```
+  use uglide\DbFixtureManager\ContainerAbstract;
+  class Shops_Fixtures_Container extends ContainerAbstract
 	{
 
    	 public static $fixtures = array(
@@ -107,13 +107,52 @@ class Shops_Fixtures_Container extends Core_Tests_Fixtures_Container_Abstract
 	        $shops->delete(' true = true ');
 	    }
 }
-`
+```
 
 **!** Метод, который поднимает фикстуру **обязательно должен регистрировать сборщик мусора (cleaner)**.  Cleaner - это метод, который будет вызван автоматически для удаления поднятой фикстуры.
 
+Также необходимо определить загрузчик контейнеров фикстур, например его можно определить в bootstrap.php:
+
+```
+/**
+ * Init Fixtures loader
+ */
+spl_autoload_register(function($className) {
+        $matches = array();
+
+        if (preg_match('/([a-z]+)_Fixtures_Container/i', $className, $matches)) {
+            $path = __DIR__ . '/fixtures/' . $matches[1] . '.php';
+
+            if (file_exists($path)) {
+                require_once $path;
+            }
+        }
+    });
+
+```
+
+Далее необходимо унаследовать абстрактный класс тест кейса, и реализовать метод получения объекта для работы с Бд
+
+```
+use uglide\DbFixtureManager\TestCase;
+
+class BaseTestCase extends TestCase
+{
+
+    protected function getDb()
+    {
+        return Database::instance();
+    }
+
+}
+```
+
+Все тест-кейсы с фикстурами будут наследоваться от этого класса
+
+
 Как использовать в тестах:
 
-`
+```
 
 // Example 1 
 
@@ -216,16 +255,16 @@ class Shops_Fixtures_Container extends Core_Tests_Fixtures_Container_Abstract
                 )
         );
     }
-`
+```
 Использование фикстур из контейнера
 
 Как вы уже догадываетесь из заголовка, в данном менеджере фикстур есть возможность использовать фикстуры непосредственно из контейнера.
 
 Предположим, у нас есть следующий контейнер с фикстурами:
 
-`
-
-	class Shops_Fixtures_Container extends 	Core_Tests_Fixtures_Container_Abstract
+```
+        use uglide\DbFixtureManager\ContainerAbstract;
+        class Shops_Fixtures_Container extends ContainerAbstract
 	{
 
 	    /**
@@ -245,11 +284,11 @@ class Shops_Fixtures_Container extends Core_Tests_Fixtures_Container_Abstract
 	    );
 	 }
 
-`
+```
 
 Данную фикстуру мы можем использовать в тестах следующим образом:
 
-`
+```
 
 	//  Example 1
     /**
@@ -284,15 +323,15 @@ class Shops_Fixtures_Container extends Core_Tests_Fixtures_Container_Abstract
         // ....
     }
 
-`
+```
 
 **Но зачем это, если можно просто вызвать в тесте статическую переменную контейнера?!**
 
 Работая с фикстурами через менеджер у вас **есть возможность получать динамически созданные фикстуры**:
 
-`
-
-	class Shops_Fixtures_Container extends Core_Tests_Fixtures_Container_Abstract
+```
+        use uglide\DbFixtureManager\ContainerAbstract;
+        class Shops_Fixtures_Container extends ContainerAbstract
 	{
 	    /**
 	     * Статическая фикстура
@@ -330,7 +369,7 @@ class Shops_Fixtures_Container extends Core_Tests_Fixtures_Container_Abstract
 	        $this->_fixture['someGeneratedFixture'];
 	        // ....
 	    }
-`
+```
 
 ## Преимущества ##
 
