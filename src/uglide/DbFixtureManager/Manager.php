@@ -78,7 +78,7 @@ class Manager
 
                 } elseif (isset($fixture['fixtureVar'])) {
 
-                    $this->loadMethodFixture($fixture, $testCase, $fixtureContainer);
+                    $this->loadVarFixture($fixture, $testCase, $fixtureContainer);
                 }
 
             } catch (Exception $e) {
